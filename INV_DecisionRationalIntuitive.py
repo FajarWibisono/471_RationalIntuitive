@@ -140,7 +140,8 @@ if st.button("✅ Hitung Hasil"):
             st.metric("Skor Intuitif", intuitive_score)
 
         # Grafik
-        fig, ax = plt.subplots(figsize=(8, 5))
+        st.write("Skor Rasional:", rational_score)
+        st.write("Skor Intuitif:", intuitive_score)
         categories = ['Rasional', 'Intuitif']
         values = [rational_score, intuitive_score]
         colors = ['#2E7D32', '#D32F2F']  # Hijau tua & Merah tua
@@ -150,7 +151,7 @@ if st.button("✅ Hitung Hasil"):
         for bar in bars:
             height = bar.get_height()
             ax.text(bar.get_x() + bar.get_width()/2., height, f'{int(height)}', ha='center', va='bottom')
-        st.pyplot(fig)
+     
 
         # === INTERPRETASI ELABORATIF ===
         st.header("🔍 Interpretasi Mendalam")
@@ -217,6 +218,7 @@ if st.button("✅ Hitung Hasil"):
 
         st.markdown("---")
         st.caption("Tes ini dikembangkan berdasarkan teori pengambilan keputusan oleh Kahneman (2011), Epstein (1994), dan prinsip psikometri Edward’s (1954). Hasil ini bersifat deskriptif, bukan diagnostik klinis.")
+
 
 
 
