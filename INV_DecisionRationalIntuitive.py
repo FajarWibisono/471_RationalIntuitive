@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib
 matplotlib.use('Agg')  # Gunakan backend non-GUI
 import matplotlib.pyplot as plt
-import random
 from datetime import date
 
 # Konfigurasi halaman
@@ -215,4 +214,5 @@ if st.button("✅ Hitung Hasil"):
 
         st.markdown("---")
         st.caption("Tes ini dikembangkan berdasarkan teori pengambilan keputusan oleh Kahneman (2011), Epstein (1994), dan prinsip psikometri Edward’s (1954). Hasil ini bersifat deskriptif, bukan diagnostik klinis.")
+
 
