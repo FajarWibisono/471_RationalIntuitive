@@ -2,11 +2,10 @@ import streamlit as st
 import pandas as pd
 from datetime import date
 
-# --- SET BACKEND SEBELUM IMPOR pyplot ---
+# Set matplotlib backend for Streamlit Cloud (non-GUI)
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-# ---------------------------------------
 
 # Konfigurasi halaman
 st.set_page_config(page_title="Tes Gaya Pengambilan Keputusan", layout="centered")
@@ -59,42 +58,32 @@ st.markdown("""
 - **SS** = Sangat Setuju  
 """)
 
-# Daftar pertanyaan (14 item valid berdasarkan kriteria Edward’s)
-questions_pool = [
+# Soal disusun secara tetap: selang-seling Rasional (R) dan Intuitif (I)
+questions = [
     {"text": "Saya membuat daftar kelebihan dan kekurangan sebelum memilih opsi.", "type": "rational"},
-    {"text": "Saya memeriksa fakta atau data untuk mendukung keputusan saya.", "type": "rational"},
-    {"text": "Saya lebih percaya pada angka atau bukti objektif daripada firasat.", "type": "rational"},
-    {"text": "Saya mengevaluasi setiap pilihan secara sistematis, satu per satu.", "type": "rational"},
-    {"text": "Saya sering bertanya, 'Apa bukti yang mendukung pilihan ini?'", "type": "rational"},
-    {"text": "Saya menggunakan langkah-langkah logis saat memecahkan masalah.", "type": "rational"},
-    {"text": "Saya mempertimbangkan konsekuensi jangka panjang sebelum memutuskan.", "type": "rational"},
     {"text": "Saya sering merasa 'tahu' jawabannya meski belum bisa menjelaskan alasannya.", "type": "intuitive"},
+    {"text": "Saya memeriksa fakta atau data untuk mendukung keputusan saya.", "type": "rational"},
     {"text": "Saat memilih, saya memperhatikan perasaan dalam diri saya (misalnya: tenang vs gelisah).", "type": "intuitive"},
+    {"text": "Saya lebih percaya pada angka atau bukti objektif daripada firasat.", "type": "rational"},
     {"text": "Saya mempercayai 'suara hati' saya dalam situasi yang tidak pasti.", "type": "intuitive"},
+    {"text": "Saya mengevaluasi setiap pilihan secara sistematis, satu per satu.", "type": "rational"},
     {"text": "Gambaran mental atau bayangan membantu saya menemukan solusi.", "type": "intuitive"},
+    {"text": "Saya sering bertanya, 'Apa bukti yang mendukung pilihan ini?'", "type": "rational"},
     {"text": "Saya merasa nyaman mengambil keputusan meski informasinya belum lengkap.", "type": "intuitive"},
+    {"text": "Saya menggunakan langkah-langkah logis saat memecahkan masalah.", "type": "rational"},
     {"text": "Saya sering mendapat wawasan tiba-tiba setelah 'melepaskan' masalah sejenak.", "type": "intuitive"},
+    {"text": "Saya mempertimbangkan konsekuensi jangka panjang sebelum memutuskan.", "type": "rational"},
     {"text": "Saya mengenali pola atau makna dalam situasi tanpa harus menganalisis detailnya.", "type": "intuitive"},
 ]
 
-# Acak urutan pertanyaan setiap sesi (tapi konsisten selama sesi berjalan)
-# Gunakan seed berdasarkan nama untuk konsistensi jika nama diisi
-if "shuffled_questions" not in st.session_state:
-    if nama:
-        random.seed(hash(nama) % (10 ** 9))  # agar urutan konsisten per responden
-    shuffled = questions_pool.copy()
-    random.shuffle(shuffled)
-    st.session_state.shuffled_questions = shuffled
-
-questions = st.session_state.shuffled_questions
-
-# Formulir jawaban
+# Tampilkan soal dengan default "N"
 responses = []
 for i, q in enumerate(questions):
     st.write(f"**{i+1}. {q['text']}**")
     response = st.radio(
         "",
         options=["STS", "TS", "N", "S", "SS"],
+        index=2,  # Default ke "N"
         key=f"q{i}",
         horizontal=True
     )
@@ -140,18 +129,17 @@ if st.button("✅ Hitung Hasil"):
             st.metric("Skor Intuitif", intuitive_score)
 
         # Grafik
-        st.write("Skor Rasional:", rational_score)
-        st.write("Skor Intuitif:", intuitive_score)
+        fig, ax = plt.subplots(figsize=(8, 5))
         categories = ['Rasional', 'Intuitif']
         values = [rational_score, intuitive_score]
-        colors = ['#2E7D32', '#D32F2F']  # Hijau tua & Merah tua
+        colors = ['#2E7D32', '#D32F2F']
         bars = ax.bar(categories, values, color=colors, edgecolor='black')
         ax.set_title('Perbandingan Gaya Pengambilan Keputusan', fontsize=14, fontweight='bold')
         ax.set_ylabel('Total Skor')
         for bar in bars:
             height = bar.get_height()
             ax.text(bar.get_x() + bar.get_width()/2., height, f'{int(height)}', ha='center', va='bottom')
-     
+        st.pyplot(fig)
 
         # === INTERPRETASI ELABORATIF ===
         st.header("🔍 Interpretasi Mendalam")
@@ -218,7 +206,3 @@ if st.button("✅ Hitung Hasil"):
 
         st.markdown("---")
         st.caption("Tes ini dikembangkan berdasarkan teori pengambilan keputusan oleh Kahneman (2011), Epstein (1994), dan prinsip psikometri Edward’s (1954). Hasil ini bersifat deskriptif, bukan diagnostik klinis.")
-
-
-
-
