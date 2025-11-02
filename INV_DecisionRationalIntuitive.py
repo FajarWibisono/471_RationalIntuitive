@@ -1,9 +1,12 @@
 import streamlit as st
 import pandas as pd
-import matplotlib
-matplotlib.use('Agg')  # Gunakan backend non-GUI
-import matplotlib.pyplot as plt
 from datetime import date
+
+# --- SET BACKEND SEBELUM IMPOR pyplot ---
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+# ---------------------------------------
 
 # Konfigurasi halaman
 st.set_page_config(page_title="Tes Gaya Pengambilan Keputusan", layout="centered")
@@ -214,5 +217,6 @@ if st.button("✅ Hitung Hasil"):
 
         st.markdown("---")
         st.caption("Tes ini dikembangkan berdasarkan teori pengambilan keputusan oleh Kahneman (2011), Epstein (1994), dan prinsip psikometri Edward’s (1954). Hasil ini bersifat deskriptif, bukan diagnostik klinis.")
+
 
 
