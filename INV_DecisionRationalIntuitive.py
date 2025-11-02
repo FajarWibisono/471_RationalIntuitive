@@ -206,3 +206,21 @@ if st.button("✅ Hitung Hasil"):
 
         st.markdown("---")
         st.caption("Tes ini dikembangkan berdasarkan teori pengambilan keputusan oleh Kahneman (2011), Epstein (1994), dan prinsip psikometri Edward’s (1954). Hasil ini bersifat deskriptif, bukan diagnostik klinis.")
+
+        # Sembunyikan tombol Fork & GitHub di Streamlit Cloud
+st.markdown(
+    """
+    <style>
+        /* Sembunyikan tombol Fork dan ikon GitHub */
+        .stApp [data-testid="stHeader"] {
+            display: none !important;
+        }
+        /* Jika ingin sembunyikan juga menu 3 titik (More options) */
+        .stApp [data-testid="stToolbar"] {
+            display: none !important;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
